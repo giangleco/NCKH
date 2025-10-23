@@ -1,0 +1,14 @@
+# Cấu hình IDE của JetBrains (PyCharm, IntelliJ)
+.idea/
+
+# Cấu hình IDE của Visual Studio Code
+.vscode/
+
+# Thư mục cache của Python
+__pycache__/
+
+# Thư mục dữ liệu (nếu bạn muốn bỏ qua)
+dataset/
+
+# Thư mục tùy chỉnh
+Hoang/
