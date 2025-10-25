@@ -1,8 +1,11 @@
 import cv2
+import os
 import numpy as np
 import sys
 import time  # Import thư viện time
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+from module.preprocess_images import load_and_prepare_data
 IMAGE_PATH = 'dataset/Flood_Area_Segmentation/Image/0.jpg'
 LABEL_PATH = 'dataset/Flood_Area_Segmentation/Mask/0.png' 
 ROUND_FLOAT = 3
@@ -37,39 +40,39 @@ def round_float(number: float, n: int = 3) -> float:
         return int(number)
     return round(number, n)
 
-def load_and_prepare_data(image_path, label_path, water_label_id):
-    print("Đang tải và chuẩn bị dữ liệu!")
-    load_time_start = time.time()
+# def load_and_prepare_data(image_path, label_path, water_label_id):
+#     print("Đang tải và chuẩn bị dữ liệu!")
+#     load_time_start = time.time()
 
-    # Tải ảnh gốc
-    img = cv2.imread(image_path)
-    if img is None:
-        print(f"LỖI: Không thể tìm thấy ảnh gốc tại: {image_path}")
-        return None, None, None, 0
-    img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    original_shape = img_rgb.shape
+#     # Tải ảnh gốc
+#     img = cv2.imread(image_path)
+#     if img is None:
+#         print(f"LỖI: Không thể tìm thấy ảnh gốc tại: {image_path}")
+#         return None, None, None, 0
+#     img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+#     original_shape = img_rgb.shape
 
-    # Chuyển ảnh sang dạng (Số_pixel, 3) và chuẩn hóa [0, 1]
-    pixel_data = img_rgb.astype(np.float32) / 255.0
-    reshaped_data = pixel_data.reshape(-1, 3) 
-    n_samples = reshaped_data.shape[0]
+#     # Chuyển ảnh sang dạng (Số_pixel, 3) và chuẩn hóa [0, 1]
+#     pixel_data = img_rgb.astype(np.float32) / 255.0
+#     reshaped_data = pixel_data.reshape(-1, 3) 
+#     n_samples = reshaped_data.shape[0]
 
-    # Tải ảnh nhãn
-    label_img_gray = cv2.imread(label_path, cv2.IMREAD_GRAYSCALE)
-    if label_img_gray is None:
-        print(f"LỖI: Không thể tìm thấy ảnh nhãn tại: {label_path}")
-        return None, None, None, 0
+#     # Tải ảnh nhãn
+#     label_img_gray = cv2.imread(label_path, cv2.IMREAD_GRAYSCALE)
+#     if label_img_gray is None:
+#         print(f"LỖI: Không thể tìm thấy ảnh nhãn tại: {label_path}")
+#         return None, None, None, 0
     
-    # Đảm bảo ảnh nhãn có cùng kích thước
-    if label_img_gray.shape[0:2] != original_shape[0:2]:
-        label_img_gray = cv2.resize(label_img_gray, (original_shape[1], original_shape[0]), 
-                                   interpolation=cv2.INTER_NEAREST)
+#     # Đảm bảo ảnh nhãn có cùng kích thước
+#     if label_img_gray.shape[0:2] != original_shape[0:2]:
+#         label_img_gray = cv2.resize(label_img_gray, (original_shape[1], original_shape[0]), 
+#                                    interpolation=cv2.INTER_NEAREST)
     
-    labels_true_flat = label_img_gray.reshape(-1) # (N_pixels,)
-    labels_true_binary = np.where(labels_true_flat == water_label_id, 1, 0)
-    load_time_total = time.time() - load_time_start
+#     labels_true_flat = label_img_gray.reshape(-1) # (N_pixels,)
+#     labels_true_binary = np.where(labels_true_flat == water_label_id, 1, 0)
+#     load_time_total = time.time() - load_time_start
     
-    return reshaped_data, labels_true_binary, n_samples, load_time_total
+#     return reshaped_data, labels_true_binary, n_samples, load_time_total
 
 def run_fcm_clustering(data, n_clusters, m, epsilon, max_iter, seed):
     print(f"Bắt đầu chạy FCM với k={n_clusters} cụm!")
