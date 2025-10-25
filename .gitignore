@@ -12,3 +12,6 @@ dataset/
 
 # Thư mục tùy chỉnh
 Hoang/
+__pycache__/
+*.pyc
+module/
