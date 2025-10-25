@@ -94,9 +94,9 @@ def write_report_fcm(alg: str,
         wdvl(dunn(data_sample, labels_pred_sample)),  # DI
         wdvl(davies_bouldin(data_sample, labels_pred_sample)),  # DB
         wdvl(partition_coefficient(U)),  # PC
-        wdvl(partition_entropy(U)),  # PE
+        wdvl(partition_entropy(U)),  # PE       
         wdvl(Xie_Benie(X, V, U)),  # XB
-        wdvl(accuracy_score(labels_true, labels_pred)), #AC
+        wdvl(accuracy_score(labels_true, labels_pred_inverted)), #AC
         wdvl(f1_score(labels_true, final_pred_labels, average='weighted')) #F1
     ]
     return SPLIT.join(kqdg)
